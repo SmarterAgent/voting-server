@@ -9,6 +9,7 @@ io.of('/lobby').on('connect', socket => {
   socket.on('add-user', user => {
     user.id = socket.id;
     user.hasVoted = false;
+    user.vote = NaN;
 
     if (users.length === 0) {
       user.isAdmin = true;
@@ -26,6 +27,8 @@ io.of('/lobby').on('connect', socket => {
       user.hasVoted = true;
 
       results.push(vote);
+
+      user.vote = vote;
 
       io.of('/lobby').emit('list-users', users);
 
