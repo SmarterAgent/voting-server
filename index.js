@@ -9,6 +9,7 @@ io.of('/lobby').on('connect', socket => {
   socket.on('add-user', user => {
     user.id = socket.id;
     user.hasVoted = false;
+    user.vote = null;
 
     if (users.length === 0) {
       user.isAdmin = true;
@@ -27,6 +28,8 @@ io.of('/lobby').on('connect', socket => {
 
       results.push(vote);
 
+      user.vote = vote;
+
       io.of('/lobby').emit('list-users', users);
 
       if (!users.some(user => user.hasVoted == false)) {
@@ -43,6 +46,7 @@ io.of('/lobby').on('connect', socket => {
     results = [];
     users = users.map(user => {
       user.hasVoted = false;
+      user.vote = null;
       return user;
     });
     io.of('/lobby').emit('list-users', users);
